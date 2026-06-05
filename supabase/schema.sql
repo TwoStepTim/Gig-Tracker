@@ -1,35 +1,38 @@
+-- GigTrak Supabase Schema
+-- Run this in your Supabase SQL editor
+
 create table if not exists public.shifts (
-  id uuid primary key,
-  created_at timestamptz default now(),
+  id              text        primary key,
+  date            date        not null,
+  platform        text        not null default 'DoorDash',
+  start_mileage   numeric     not null default 0,
+  end_mileage     numeric     not null default 0,
+  earnings        numeric     not null default 0,
+  start_time      time            null,
+  end_time        time            null,
+  notes           text        not null default '',
 
-  date date not null,
-  platform text not null,
+  -- Calculated fields (stored for fast reads & export)
+  miles           numeric     not null default 0,
+  gas_cost        numeric     not null default 0,
+  wear_cost       numeric     not null default 0,
+  net_profit      numeric     not null default 0,
+  hours           numeric     not null default 0,
+  gross_hourly    numeric     not null default 0,
+  net_hourly      numeric     not null default 0,
+  tax_deduction   numeric     not null default 0,
 
-  start_mileage numeric(12,1) not null,
-  end_mileage numeric(12,1) not null,
-  earnings numeric(10,2) not null,
-
-  start_time text,
-  end_time text,
-
-  gas_price numeric(10,2),
-  mpg numeric(10,2),
-  wear_rate numeric(10,2),
-
-  business_purpose text,
-  notes text,
-
-  miles numeric(10,1),
-  gas_cost numeric(10,2),
-  wear_cost numeric(10,2),
-  net_profit numeric(10,2),
-  hours numeric(10,2),
-  gross_hourly numeric(10,2),
-  net_hourly numeric(10,2),
-  tax_deduction numeric(10,2)
+  created_at      timestamptz not null default now()
 );
 
--- Simple personal-project setup:
--- Keep Row Level Security OFF while you are learning and only using this privately.
--- Do NOT share your Supabase project keys publicly.
-alter table public.shifts disable row level security;
+-- Index for date-sorted queries
+create index if not exists shifts_date_idx on public.shifts (date desc);
+create index if not exists shifts_created_idx on public.shifts (created_at desc);
+
+-- Enable Row Level Security
+alter table public.shifts enable row level security;
+
+-- Policy: open access (single-user personal app).
+-- If you want auth later, replace with: using (auth.uid() = user_id)
+create policy "Allow all access" on public.shifts
+  for all using (true) with check (true);
