@@ -455,6 +455,28 @@ button, input, select, textarea { font: inherit; }
 .btn-icon:hover { background: var(--surface-2); color: var(--text); }
 .btn-icon.btn-danger { color: var(--red); border-color: #fecaca; background: var(--red-dim); }
 .btn-icon.btn-danger:hover { background: #fca5a5; }
+.btn-icon.btn-edit { color: var(--accent-text); border-color: #bfdbfe; background: var(--accent-dim); }
+.btn-icon.btn-edit:hover { background: #bfdbfe; }
+
+/* Full-width edit button at bottom of detail modal (easy thumb reach on mobile) */
+.btn-edit-full {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  border: 1.5px solid #bfdbfe;
+  background: var(--accent-dim);
+  color: var(--accent-text);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-edit-full:hover { background: #bfdbfe; }
 
 /* ── Forms ──────────────────────────────────────────────────────────────────── */
 .shift-form {
